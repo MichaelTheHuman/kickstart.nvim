@@ -1,3 +1,9 @@
+--
+-- Good stuff:
+--  Create Dir for new file:
+--    :!mkdir -p %:p:h
+--    https://stackoverflow.com/questions/4292733/vim-creating-parent-directories-on-save
+--
 --[[
 
 =====================================================================
@@ -399,6 +405,29 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
+        -- defaults = {
+        --   vimgrep_arguments = {
+        --     'rg',
+        --     '--files', -- Search for files
+        --     '--hidden', -- Include hidden files
+        --     '-g',
+        --     '!.git/', -- Exclude .git directory
+        --   },
+        -- },
+        defaults = {
+          file_ignore_patterns = { 'node_modules', '.git' },
+        },
+        pickers = {
+          find_files = {
+            hidden = true,
+          },
+          grep_string = {
+            additional_args = { '--hidden' },
+          },
+          live_grep = {
+            additional_args = { '--hidden' },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -660,7 +689,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
+        pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -668,7 +697,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
+        --        ts_ls = {},
         --
 
         lua_ls = {
@@ -758,10 +787,10 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
+        python = { 'isort', 'black' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
       },
     },
   },
@@ -987,6 +1016,11 @@ require('lazy').setup({
   -- require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  --
+  -- MK: Adding typescript-tools for Vue
+  require 'custom.plugins.typescript-tools',
+  -- require 'custom.plugins.nvim-lspconfig',
+  require 'custom.plugins.tailwind-tools',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
@@ -1020,5 +1054,18 @@ require('lazy').setup({
   },
 })
 
+require('tailwind-tools').setup {}
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+--
+--
+--
+-- MK: Remapping movement keys to match Colemak layout
+-- MK: Bad idea - overriding some actual commands like I :(
+
+-- for _, mode in ipairs({'n', 'v', 'o'}) do
+--  vim.keymap.set(mode, 'n', 'h', { noremap = true })
+--  vim.keymap.set(mode, 'e', 'k', { noremap = true })
+--  vim.keymap.set(mode, 'i', 'j', { noremap = true })
+--  vim.keymap.set(mode, 'o', 'l', { noremap = true })
+-- end
